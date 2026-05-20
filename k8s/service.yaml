@@ -1,13 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: egovframe-web-sample
+  name: egovframe-web
+  labels:
+    app: egovframe-web
+    app.kubernetes.io/name: egovframe-web
+    app.kubernetes.io/part-of: egovframe-sample
 spec:
+  type: ClusterIP
   selector:
-    app: egovframe-web-sample
+    app: egovframe-web
   ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30000
-  type: NodePort
-  
+    - name: http
+      port: 8080
+      targetPort: http

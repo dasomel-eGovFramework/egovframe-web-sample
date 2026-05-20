@@ -4,7 +4,15 @@ metadata:
   name: egovframe-web
   labels:
     app: egovframe-web
+    app.kubernetes.io/name: egovframe-web
+    app.kubernetes.io/part-of: egovframe-sample
 spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: egovframe-web
@@ -12,9 +20,59 @@ spec:
     metadata:
       labels:
         app: egovframe-web
+        app.kubernetes.io/name: egovframe-web
+        app.kubernetes.io/part-of: egovframe-sample
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: egovframe-web
+          # Replace with your registry/tag, e.g. ghcr.io/<org>/egovframe-web:5.0.0
           image: egovframe-web:5.0.0
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tomcat-work
+              mountPath: /usr/local/tomcat/work
+            - name: tomcat-temp
+              mountPath: /usr/local/tomcat/temp
+            - name: tomcat-logs
+              mountPath: /usr/local/tomcat/logs
+      volumes:
+        - name: tomcat-work
+          emptyDir: {}
+        - name: tomcat-temp
+          emptyDir: {}
+        - name: tomcat-logs
+          emptyDir: {}
