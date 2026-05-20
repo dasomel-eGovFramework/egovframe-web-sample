@@ -17,6 +17,12 @@ package egovframework.example.sample.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.egovframe.rte.psl.dataaccess.mapper.EgovMapper;
 
 import egovframework.example.sample.service.SampleVO;
@@ -33,6 +39,7 @@ import egovframework.example.sample.service.SampleVO;
  *          수정일          수정자           수정내용
  *  ----------------    ------------    ---------------------------
  *   2014.01.24        표준프레임워크센터          최초 생성
+ *   2025.05.20        표준프레임워크센터          정적 SQL 어노테이션 방식으로 전환
  *
  * </pre>
  */
@@ -45,6 +52,7 @@ public interface SampleMapper {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
+	@Insert("INSERT INTO SAMPLE (ID, NAME, DESCRIPTION, USE_YN, REG_USER) VALUES (#{id}, #{name}, #{description}, #{useYn}, #{regUser})")
 	void insertSample(SampleVO vo) throws Exception;
 
 	/**
@@ -53,6 +61,7 @@ public interface SampleMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
+	@Update("UPDATE SAMPLE SET NAME=#{name}, DESCRIPTION=#{description}, USE_YN=#{useYn} WHERE ID=#{id}")
 	void updateSample(SampleVO vo) throws Exception;
 
 	/**
@@ -61,6 +70,7 @@ public interface SampleMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
+	@Delete("DELETE FROM SAMPLE WHERE ID=#{id}")
 	void deleteSample(SampleVO vo) throws Exception;
 
 	/**
@@ -69,10 +79,18 @@ public interface SampleMapper {
 	 * @return 조회한 글
 	 * @exception Exception
 	 */
+	@Select("SELECT ID, NAME, DESCRIPTION, USE_YN, REG_USER FROM SAMPLE WHERE ID=#{id}")
+	@Results(id = "sampleResult", value = {
+		@Result(property = "id",          column = "id"),
+		@Result(property = "name",        column = "name"),
+		@Result(property = "description", column = "description"),
+		@Result(property = "useYn",       column = "use_yn"),
+		@Result(property = "regUser",     column = "reg_user")
+	})
 	SampleVO selectSample(SampleVO vo) throws Exception;
 
 	/**
-	 * 글 목록을 조회한다.
+	 * 글 목록을 조회한다. (동적 SQL — XML 매퍼 사용)
 	 * @param vo - 조회할 정보가 담긴 VO
 	 * @return 글 목록
 	 * @exception Exception
@@ -80,7 +98,7 @@ public interface SampleMapper {
 	List<?> selectSampleList(SampleVO vo) throws Exception;
 
 	/**
-	 * 글 총 갯수를 조회한다.
+	 * 글 총 갯수를 조회한다. (동적 SQL — XML 매퍼 사용)
 	 * @param vo - 조회할 정보가 담긴 VO
 	 * @return 글 총 갯수
 	 * @exception
