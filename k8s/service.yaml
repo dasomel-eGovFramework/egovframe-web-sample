@@ -7,10 +7,11 @@ metadata:
     app.kubernetes.io/name: egovframe-web
     app.kubernetes.io/part-of: egovframe-sample
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: egovframe-web
   ports:
     - name: http
       port: 8080
       targetPort: http
+      nodePort: 30000
