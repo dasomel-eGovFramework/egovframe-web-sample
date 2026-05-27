@@ -57,17 +57,3 @@ spec:
             capabilities:
               drop:
                 - ALL
-          volumeMounts:
-            - name: tomcat-work
-              mountPath: /usr/local/tomcat/work
-            - name: tomcat-temp
-              mountPath: /usr/local/tomcat/temp
-            - name: tomcat-logs
-              mountPath: /usr/local/tomcat/logs
-      volumes:
-        - name: tomcat-work
-          emptyDir: {}
-        - name: tomcat-temp
-          emptyDir: {}
-        - name: tomcat-logs
-          emptyDir: {}
