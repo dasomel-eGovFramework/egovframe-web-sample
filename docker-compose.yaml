@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: egovframe-web-sample:5.0.0
+    container_name: egovframe-web-sample
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/app/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
