@@ -23,11 +23,6 @@ spec:
         app.kubernetes.io/name: egovframe-web
         app.kubernetes.io/part-of: egovframe-sample
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
       containers:
         - name: egovframe-web
           # Replace with your registry/tag, e.g. ghcr.io/<org>/egovframe-web:5.0.0
