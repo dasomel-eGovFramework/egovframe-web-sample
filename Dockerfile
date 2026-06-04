@@ -1,7 +1,7 @@
 #########################################################
 # 목적 : egovframe-web-5.0.0.war를 tomcat으로 구동하는 도커 이미지 생성
 # 실행방법 : 프로젝트 루트디렉토리에서(Dockerfile 경로) 아래 명령어 실행
-# (명령어) docker build . -t egovframe-web-sample:5.0.0
+# (명령어) docker build . -t egovframe-web:5.0.0
 #########################################################
 
 # tomcat base image 설정 (10.1-jdk17-temurin)

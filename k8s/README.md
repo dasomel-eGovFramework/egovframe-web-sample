@@ -1,9 +1,22 @@
 ## K-Pass(Kubernetes) 배포 설정
 - web-sample 프로젝트를 kubernetes 환경에 배포하기 위한 설정파일
-- 로컬PC에 minikube가 구성된 환경을 가정
+- 로컬PC에 minikube 또는 Docker Desktop / kind가 구성된 환경을 가정
 
 ---
-### minikube 내 도커 이미지 로드
+### 도커 이미지 빌드
+- 프로젝트 루트 디렉토리(Dockerfile 위치)에서 아래 명령어로 이미지를 생성
+  - ```docker build -t egovframe-web:5.0.0 .```
+- 빌드된 이미지 확인
+  - ```docker image ls | grep egovframe-web```
+
+### 실행 환경별 이미지 적재 및 접속 방법
+
+| 환경 | 이미지 적재 | 웹 접속 URL |
+|---|---|---|
+| **minikube** | `minikube image load egovframe-web:5.0.0` 필요 | `http://<minikube INTERNAL-IP>:30000/app/` |
+| **Docker Desktop / kind** | 별도 적재 불필요 (로컬 Docker 이미지 그대로 사용) | `http://localhost:30000/app/` |
+
+### minikube 내 도커 이미지 로드 (minikube 사용 시)
 - 대상 이미지 --> egovframe-web:5.0.0
   - 대상 이미지 확인 명령어 ``` docker image ls ```
 - minikube 내 이미지 로드
