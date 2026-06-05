@@ -1,0 +1,21 @@
+# 실행 전 준비: Dockerfile이 빌드 산출물 WAR(target/*.war)를 복사하는 구성이므로
+# `docker compose up --build` 이전에 반드시 `mvn package`로 WAR를 먼저 생성해야 합니다.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: egovframe-web:5.0.0
+    container_name: egovframe-web-sample
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/app/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
